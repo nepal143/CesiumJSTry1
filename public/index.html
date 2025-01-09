@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CesiumJS - Mark Area and Load 3D Model</title>
+    <!-- Update the path to Cesium.js and widgets.css based on your server configuration -->
+    <script src="/cesium/Build/Cesium/Cesium.js"></script>
+    <link href="/cesium/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        #cesiumContainer {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="info">Press Y to start selecting, X to remove, P to download selected area</div>
+
+    <script src="dragSelection.js"></script> <!-- Import the external script for drag selection -->
+    <script>
+        // Set Cesium Ion API Key dynamically (from environment variable)
+       
+    </script>
+</body>
+</html>
