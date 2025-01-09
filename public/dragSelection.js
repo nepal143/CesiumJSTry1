@@ -1,5 +1,3 @@
-// dragSelection.js
-
 let startPosition = null;
 let selectedRectangle = null;
 let isSelecting = false; // Flag to track if selection mode is active
@@ -63,22 +61,40 @@ function saveSelection(viewer) {
         const lonMax = Cesium.Math.toDegrees(rect.east);
         const latMax = Cesium.Math.toDegrees(rect.north);
 
-        const data = {
-            lonMin,
-            latMin,
-            lonMax,
-            latMax,
-            timestamp: new Date().toISOString(),
-        };
+        // Sample terrain for detailed heights
+        const terrainProvider = viewer.terrainProvider;
+        const positions = [
+            Cesium.Cartographic.fromDegrees(lonMin, latMin),
+            Cesium.Cartographic.fromDegrees(lonMin, latMax),
+            Cesium.Cartographic.fromDegrees(lonMax, latMin),
+            Cesium.Cartographic.fromDegrees(lonMax, latMax),
+        ];
 
-        const dataStr = JSON.stringify(data, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'selected_area.json';
-        link.click();
+        Cesium.sampleTerrainMostDetailed(terrainProvider, positions)
+            .then((updatedPositions) => {
+                const heights = updatedPositions.map((p) => p.height);
 
-        console.log('Selected area saved:', data);
+                const data = {
+                    lonMin,
+                    latMin,
+                    lonMax,
+                    latMax,
+                    heights,
+                    timestamp: new Date().toISOString(),
+                };
+
+                const dataStr = JSON.stringify(data, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'selected_area.json';
+                link.click();
+
+                console.log('Selected area saved:', data);
+            })
+            .catch((error) => {
+                console.error('Error sampling terrain:', error);
+            });
     }
 }
 
