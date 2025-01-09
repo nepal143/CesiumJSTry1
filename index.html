@@ -18,10 +18,26 @@
 <body>
     <div id="cesiumContainer"></div>
     <script>
-        // Initialize Cesium viewer
+        // Set the Cesium Ion API Key
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNGViNjNiNi0xY2YzLTRmNTItODE0ZS01MDY4Y2FhNTFiYjgiLCJpZCI6MjY3OTE3LCJpYXQiOjE3MzY0MjQxOTV9.NGSi4KSrtbJOUBy-nzB_2MZx9HghKPWK5Rb5QL2FhS0'; // Replace with your token
+
+        // Initialize Cesium viewer with terrain provider
         const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain()
+            terrainProvider: new Cesium.CesiumTerrainProvider({
+                url: Cesium.IonResource.fromAssetId(1) // Use Cesium Ion Asset ID for global terrain
+            })
         });
+
+        // Fly to Kathmandu, Nepal, ensuring it's close to terrain
+        viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(85.324, 27.7172, 10000), // Lower camera height
+            complete: function () {
+                console.log("Camera has reached destination!");
+            }
+        });
+
+        // Ensure terrain is loaded and visible
+        viewer.scene.globe.enableLighting = true; // Enable lighting for better visualization
     </script>
 </body>
 </html>
